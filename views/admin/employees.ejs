@@ -1,0 +1,118 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Upravljanje zaposlenima</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            <i class="fas fa-plus me-2"></i>Dodaj zaposlenog
+        </button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Redni broj</th>
+                    <th>Slika</th>
+                    <th>Ime i prezime</th>
+                    <th>Funkcija</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% employees.forEach(function(employee) { %>
+                    <tr>
+                        <td><%= employee.order_number %></td>
+                        <td>
+                            <img src="<%= employee.image_url %>" alt="<%= employee.name %>" class="employee-thumb" width="50" height="50">
+                        </td>
+                        <td><%= employee.name %></td>
+                        <td><%= employee.position %></td>
+                        <td><%= employee.email %></td>
+                        <td>
+                            <span class="badge <%= employee.is_active ? 'bg-success' : 'bg-danger' %>">
+                                <%= employee.is_active ? 'Aktivan' : 'Neaktivan' %>
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary edit-employee" data-id="<%= employee.id %>">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-employee" data-id="<%= employee.id %>">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj zaposlenog</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/employees" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Ime i prezime</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="position" class="form-label">Funkcija</label>
+                        <input type="text" class="form-control" id="position" name="position" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Slika</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="order_number" class="form-label">Redni broj</label>
+                        <input type="number" class="form-control" id="order_number" name="order_number" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Otkaži</button>
+                    <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle delete employee
+    document.querySelectorAll('.delete-employee').forEach(button => {
+        button.addEventListener('click', async function() {
+            if (confirm('Da li ste sigurni da želite da obrišete zaposlenog?')) {
+                const id = this.dataset.id;
+                try {
+                    const response = await fetch(`/admin/employees/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Došlo je do greške prilikom brisanja zaposlenog.');
+                }
+            }
+        });
+    });
+});
+</script>

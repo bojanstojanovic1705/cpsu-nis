@@ -1,0 +1,164 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Početna</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><%= news.title %></li>
+        </ol>
+    </nav>
+
+    <article class="mb-5">
+        <header class="mb-4">
+            <h1 class="display-4 mb-3"><%= news.title %></h1>
+            <div class="text-muted mb-4">
+                <span><i class="fas fa-calendar-alt me-2"></i><%= new Date(news.created_at).toLocaleDateString('sr-RS') %></span>
+                <span class="ms-3"><i class="fas fa-eye me-2"></i><%= news.views %> pregleda</span>
+            </div>
+        </header>
+
+        <!-- Main Image and Gallery -->
+        <div class="mb-4">
+            <% if (news.main_image || additionalImages.length > 0) { %>
+                <div class="swiper gallery-swiper">
+                    <div class="swiper-wrapper">
+                        <% if (news.main_image) { %>
+                            <div class="swiper-slide">
+                                <img src="/uploads/news/<%= news.main_image %>" 
+                                     class="img-fluid rounded" 
+                                     alt="<%= news.title %>">
+                            </div>
+                        <% } %>
+                        <% additionalImages.forEach(function(img) { %>
+                            <div class="swiper-slide">
+                                <img src="/uploads/news/<%= img.image_path %>" 
+                                     class="img-fluid rounded" 
+                                     alt="<%= news.title %>">
+                            </div>
+                        <% }); %>
+                    </div>
+                    <% if (news.main_image && additionalImages.length > 0 || additionalImages.length > 1) { %>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    <% } %>
+                </div>
+
+                <!-- Thumbnails -->
+                <% if (news.main_image && additionalImages.length > 0 || additionalImages.length > 1) { %>
+                    <div class="swiper gallery-thumbs mt-3">
+                        <div class="swiper-wrapper">
+                            <% if (news.main_image) { %>
+                                <div class="swiper-slide">
+                                    <img src="/uploads/news/<%= news.main_image %>" 
+                                         class="img-fluid rounded" 
+                                         alt="<%= news.title %>">
+                                </div>
+                            <% } %>
+                            <% additionalImages.forEach(function(img) { %>
+                                <div class="swiper-slide">
+                                    <img src="/uploads/news/<%= img.image_path %>" 
+                                         class="img-fluid rounded" 
+                                         alt="<%= news.title %>">
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <%- news.content %>
+        </div>
+    </article>
+</div>
+
+<!-- Include Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+
+<!-- Include Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var galleryThumbs = new Swiper('.gallery-thumbs', {
+        spaceBetween: 10,
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+    });
+
+    var galleryTop = new Swiper('.gallery-swiper', {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        thumbs: {
+            swiper: galleryThumbs
+        }
+    });
+</script>
+
+<!-- Custom styles for gallery -->
+<style>
+    .gallery-swiper {
+        width: 100%;
+        height: 500px;
+    }
+
+    .gallery-swiper .swiper-slide {
+        background-size: cover;
+        background-position: center;
+    }
+
+    .gallery-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .gallery-thumbs {
+        height: 100px;
+        box-sizing: border-box;
+        padding: 10px 0;
+    }
+
+    .gallery-thumbs .swiper-slide {
+        height: 100%;
+        opacity: 0.4;
+    }
+
+    .gallery-thumbs .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .gallery-thumbs .swiper-slide-thumb-active {
+        opacity: 1;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: #0d6efd;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #0d6efd;
+    }
+
+    .content img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+<%- include('../partials/footer') %>

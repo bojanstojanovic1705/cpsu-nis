@@ -1,0 +1,86 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title mb-4"><%= employee.id ? 'Izmena zaposlenog' : 'Novi zaposleni' %></h1>
+
+                    <form action="/admin/employees<%= employee.id ? '/' + employee.id : '' %>" 
+                          method="POST" 
+                          enctype="multipart/form-data">
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Ime i prezime</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="<%= employee.name || '' %>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="position" class="form-label">Pozicija</label>
+                                <input type="text" class="form-control" id="position" name="position" 
+                                       value="<%= employee.position || '' %>" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Opis</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="3"><%= employee.description || '' %></textarea>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       value="<%= employee.email || '' %>">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Telefon</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       value="<%= employee.phone || '' %>">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="position_order" class="form-label">Redosled</label>
+                                <input type="number" class="form-control" id="position_order" name="position_order" 
+                                       value="<%= employee.position_order || 0 %>" min="0">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="image" class="form-label">Slika</label>
+                                <input type="file" class="form-control" id="image" name="image" 
+                                       accept="image/*">
+                                <% if (employee.image) { %>
+                                    <div class="mt-2">
+                                        <img src="/uploads/employees/<%= employee.image %>" 
+                                             alt="Trenutna slika"
+                                             class="img-thumbnail"
+                                             style="max-height: 100px;">
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="is_active" name="is_active" 
+                                   <%= employee.is_active ? 'checked' : '' %>>
+                            <label class="form-check-label" for="is_active">Aktivan</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="/admin/employees" class="btn btn-secondary">Odustani</a>
+                            <button type="submit" class="btn btn-primary">
+                                <%= employee.id ? 'Sačuvaj izmene' : 'Dodaj zaposlenog' %>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

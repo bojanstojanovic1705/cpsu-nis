@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Zaposleni</h1>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <% employees.forEach(function(employee) { %>
+                    <div class="col">
+                        <div class="card h-100">
+                            <% if (employee.image) { %>
+                                <img src="/uploads/employees/<%= employee.image %>" class="card-img-top" alt="<%= employee.name %>">
+                            <% } else { %>
+                                <div class="card-img-top bg-light text-center py-5">
+                                    <i class="fas fa-user fa-4x text-secondary"></i>
+                                </div>
+                            <% } %>
+                            <div class="card-body">
+                                <h5 class="card-title"><%= employee.name %></h5>
+                                <p class="card-text text-muted mb-2"><%= employee.position %></p>
+                                <% if (employee.description) { %>
+                                    <p class="card-text"><%= employee.description %></p>
+                                <% } %>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <% if (employee.email) { %>
+                                    <a href="mailto:<%= employee.email %>" class="btn btn-outline-primary btn-sm me-2">
+                                        <i class="fas fa-envelope me-1"></i>Email
+                                    </a>
+                                <% } %>
+                                <% if (employee.phone) { %>
+                                    <a href="tel:<%= employee.phone %>" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-phone me-1"></i>Telefon
+                                    </a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

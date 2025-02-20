@@ -1,0 +1,35 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Vesti i obaveštenja</h1>
+
+    <div class="row">
+        <% news.forEach(item => { %>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <% if (item.image_url) { %>
+                        <img src="<%= item.image_url %>" class="card-img-top" alt="<%= item.title %>">
+                    <% } %>
+                    <div class="card-body">
+                        <h5 class="card-title"><%= item.title %></h5>
+                        <p class="card-text text-muted">
+                            <small>
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                <%= new Date(item.published_at).toLocaleDateString('sr-RS') %>
+                                <% if (item.author_name) { %>
+                                    <br>
+                                    <i class="fas fa-user me-2"></i>
+                                    <%= item.author_name %>
+                                <% } %>
+                            </small>
+                        </p>
+                        <p class="card-text"><%= item.content.substring(0, 150) %>...</p>
+                        <a href="/news/<%= item.id %>" class="btn btn-primary">Pročitaj više</a>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,112 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title mb-4"><%= pageData.id ? 'Izmena stranice' : 'Nova stranica' %></h1>
+
+                    <form id="pageForm" action="/admin/pages<%= pageData.id ? '/' + pageData.id : '' %>" method="POST">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Naslov</label>
+                            <input type="text" class="form-control" id="title" name="title" value="<%= pageData.title || '' %>" required>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="parent_id" class="form-label">Roditeljska stranica</label>
+                                <select class="form-select" id="parent_id" name="parent_id">
+                                    <option value="">Glavna stranica (nema roditelja)</option>
+                                    <% availableParents.forEach(parent => { %>
+                                        <option value="<%= parent.id %>" 
+                                            <%= (pageData.parent_id === parent.id) ? 'selected' : '' %>
+                                            <%= (pageData.id === parent.id) ? 'disabled' : '' %>>
+                                            <%= parent.title %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="menu_order" class="form-label">Redosled u meniju</label>
+                                <input type="number" class="form-control" id="menu_order" name="menu_order" 
+                                    value="<%= pageData.menu_order || 0 %>" min="0">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Sadržaj</label>
+                            <textarea class="form-control" id="content" name="content" rows="15" required><%= pageData.content || '' %></textarea>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="is_published" name="is_published" <%= pageData.is_published ? 'checked' : '' %>>
+                            <label class="form-check-label" for="is_published">Objavi stranicu</label>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="show_in_menu" name="show_in_menu" <%= pageData.show_in_menu ? 'checked' : '' %>>
+                            <label class="form-check-label" for="show_in_menu">Prikaži u navigaciji</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="/admin/pages" class="btn btn-secondary">Odustani</a>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <%= pageData.id ? 'Sačuvaj izmene' : 'Kreiraj stranicu' %>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dodajemo TinyMCE editor -->
+<script src="https://cdn.tiny.cloud/1/e14v8gftm1yzck6me49iqzkhhaz9jzyhww32uo4rza2fozg2/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#content',
+        height: 500,
+        menubar: true,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic backcolor | \
+                alignleft aligncenter alignright alignjustify | \
+                bullist numlist outdent indent | removeformat | help',
+        language: 'sr',
+        branding: false,
+        promotion: false,
+        setup: function(editor) {
+            editor.on('change', function() {
+                editor.save(); // Ovo će sačuvati sadržaj u textarea
+            });
+        }
+    });
+
+    // Dodajemo event listener za formu
+    document.getElementById('pageForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Sprečavamo podrazumevano slanje forme
+        
+        // Uzimamo sadržaj iz TinyMCE
+        const content = tinymce.get('content').getContent();
+        document.getElementById('content').value = content;
+
+        console.log('Form data:', {
+            title: document.getElementById('title').value,
+            content: content,
+            parent_id: document.getElementById('parent_id').value,
+            menu_order: document.getElementById('menu_order').value,
+            is_published: document.getElementById('is_published').checked,
+            show_in_menu: document.getElementById('show_in_menu').checked
+        });
+
+        // Šaljemo formu
+        this.submit();
+    });
+</script>
+
+<%- include('../../partials/footer') %>

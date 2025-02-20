@@ -1,0 +1,77 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Admin Panel</h1>
+    
+    <div class="row">
+        <!-- Zaposleni -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-users me-2"></i>
+                        Zaposleni
+                    </h5>
+                    <p class="card-text">Upravljanje zaposlenima, njihovim profilima i informacijama.</p>
+                    <a href="/admin/employees" class="btn btn-primary">
+                        <i class="fas fa-cog me-2"></i>
+                        Upravljaj
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vesti -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-newspaper me-2"></i>
+                        Vesti
+                    </h5>
+                    <p class="card-text">Dodavanje i uređivanje vesti i obaveštenja.</p>
+                    <a href="/admin/news" class="btn btn-primary">
+                        <i class="fas fa-cog me-2"></i>
+                        Upravljaj
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stranice -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Stranice
+                    </h5>
+                    <p class="card-text">Uređivanje sadržaja statičnih stranica.</p>
+                    <a href="/admin/pages" class="btn btn-primary">
+                        <i class="fas fa-cog me-2"></i>
+                        Upravljaj
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Poruke -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-envelope me-2"></i>
+                        Poruke
+                    </h5>
+                    <p class="card-text">Pregled poruka pristiglih preko kontakt forme.</p>
+                    <a href="/admin-messages" class="btn btn-primary">
+                        <i class="fas fa-cog me-2"></i>
+                        Upravljaj
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

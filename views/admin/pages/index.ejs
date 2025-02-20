@@ -1,0 +1,71 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Upravljanje stranicama</h1>
+        <a href="/admin/pages/new" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nova stranica
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Naslov</th>
+                    <th>URL Putanja</th>
+                    <th>Roditeljska stranica</th>
+                    <th>Redosled</th>
+                    <th>Status</th>
+                    <th>U meniju</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% pages.forEach(page => { %>
+                    <tr>
+                        <td>
+                            <% if (page.parent_id) { %>
+                                <span class="ms-3">└─</span>
+                            <% } %>
+                            <%= page.title %>
+                        </td>
+                        <td><code>/<%= page.slug %></code></td>
+                        <td>
+                            <% if (page.parent_title) { %>
+                                <%= page.parent_title %>
+                            <% } else { %>
+                                <span class="text-muted">-</span>
+                            <% } %>
+                        </td>
+                        <td><%= page.menu_order %></td>
+                        <td>
+                            <span class="badge <%= page.is_published ? 'bg-success' : 'bg-warning' %>">
+                                <%= page.is_published ? 'Objavljeno' : 'Nacrt' %>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge <%= page.show_in_menu ? 'bg-info' : 'bg-secondary' %>">
+                                <%= page.show_in_menu ? 'Da' : 'Ne' %>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="/admin/pages/<%= page.id %>/edit" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="/admin/pages/<%= page.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Da li ste sigurni? Sve podstranice će postati glavne stranice.');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,42 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/news">Vesti</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><%= news.title %></li>
+        </ol>
+    </nav>
+
+    <article class="mb-5">
+        <h1 class="mb-4"><%= news.title %></h1>
+        
+        <div class="text-muted mb-4">
+            <i class="fas fa-calendar-alt me-2"></i>
+            <%= new Date(news.published_at).toLocaleDateString('sr-RS') %>
+            <% if (news.author_name) { %>
+                <span class="ms-3">
+                    <i class="fas fa-user me-2"></i>
+                    <%= news.author_name %>
+                </span>
+            <% } %>
+        </div>
+
+        <% if (news.image_url) { %>
+            <img src="<%= news.image_url %>" class="img-fluid rounded mb-4" alt="<%= news.title %>">
+        <% } %>
+
+        <div class="news-content">
+            <%- news.content %>
+        </div>
+    </article>
+
+    <div class="mt-5">
+        <a href="/news" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Nazad na vesti
+        </a>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

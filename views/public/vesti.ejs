@@ -1,0 +1,142 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+    <h1 class="mb-4">Vesti</h1>
+    
+    <!-- Filter i pretraga -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Pretraži vesti...">
+                <button class="btn btn-primary" type="button" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="yearFilter">
+                <option value="">Sve godine</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="monthFilter">
+                <option value="">Svi meseci</option>
+                <option value="1">Januar</option>
+                <option value="2">Februar</option>
+                <option value="3">Mart</option>
+                <option value="4">April</option>
+                <option value="5">Maj</option>
+                <option value="6">Jun</option>
+                <option value="7">Jul</option>
+                <option value="8">Avgust</option>
+                <option value="9">Septembar</option>
+                <option value="10">Oktobar</option>
+                <option value="11">Novembar</option>
+                <option value="12">Decembar</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Lista vesti -->
+    <div class="row" id="newsList">
+        <% if (typeof news !== 'undefined' && news.length > 0) { %>
+            <% news.forEach(function(item) { %>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <% if (item.image_url) { %>
+                            <img src="<%= item.image_url %>" class="card-img-top" alt="<%= item.title %>">
+                        <% } %>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= item.title %></h5>
+                            <p class="card-text text-muted">
+                                <small>
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    <%= new Date(item.created_at).toLocaleDateString('sr-RS', { 
+                                        year: 'numeric', 
+                                        month: 'long', 
+                                        day: 'numeric' 
+                                    }) %>
+                                </small>
+                            </p>
+                            <p class="card-text"><%= item.excerpt || item.content.substring(0, 150) + '...' %></p>
+                            <a href="/vesti/<%= item.id %>" class="btn btn-primary">Pročitaj više</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Trenutno nema dostupnih vesti.
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Paginacija -->
+    <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="/vesti?page=<%= currentPage - 1 %>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                <% } %>
+                
+                <% for(let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                        <a class="page-link" href="/vesti?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+                
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="/vesti?page=<%= currentPage + 1 %>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+    <% } %>
+</div>
+
+<!-- JavaScript za filtriranje i pretragu -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const yearFilter = document.getElementById('yearFilter');
+    const monthFilter = document.getElementById('monthFilter');
+
+    function applyFilters() {
+        const searchTerm = searchInput.value;
+        const year = yearFilter.value;
+        const month = monthFilter.value;
+
+        let url = '/vesti?';
+        if (searchTerm) url += `search=${encodeURIComponent(searchTerm)}&`;
+        if (year) url += `year=${year}&`;
+        if (month) url += `month=${month}&`;
+
+        window.location.href = url;
+    }
+
+    searchButton.addEventListener('click', applyFilters);
+    yearFilter.addEventListener('change', applyFilters);
+    monthFilter.addEventListener('change', applyFilters);
+
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            applyFilters();
+        }
+    });
+});
+</script>
+
+<%- include('../partials/footer') %>

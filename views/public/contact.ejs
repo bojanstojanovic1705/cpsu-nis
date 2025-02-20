@@ -1,0 +1,146 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 animate__animated animate__fadeInLeft">
+            <h1>Kontaktirajte nas</h1>
+            <p class="lead">Slobodno nas kontaktirajte za sve informacije o našim uslugama.</p>
+
+            <div class="mt-4">
+                <h3>Naša lokacija</h3>
+                <p><i class="fas fa-map-marker-alt me-2"></i>Bulevar Nemanjića 85a, 18000 Niš</p>
+                
+                <h3 class="mt-4">Kontakt informacije</h3>
+                <p><i class="fas fa-phone me-2"></i>018/216-916</p>
+                <p><i class="fas fa-envelope me-2"></i>info@cpsu.rs</p>
+                
+                <h3 class="mt-4">Radno vreme</h3>
+                <p><i class="fas fa-clock me-2"></i>Ponedeljak - Petak: 7:30 - 15:30</p>
+            </div>
+
+            <div class="mt-4">
+                <h3>Pratite nas</h3>
+                <div class="social-links">
+                    <a href="#" class="me-3 text-primary"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="#" class="me-3 text-danger"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="#" class="me-3 text-info"><i class="fab fa-twitter fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 animate__animated animate__fadeInRight">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title">Pošaljite nam poruku</h2>
+
+                    <% if (typeof success !== 'undefined' && success.length > 0) { %>
+                        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                            <%= success %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                    <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                    <form id="contactForm" action="/kontakt" method="POST" class="mt-4 needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Ime i prezime *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                            <div class="invalid-feedback">
+                                Molimo unesite vaše ime i prezime
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email adresa *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="invalid-feedback">
+                                Molimo unesite validnu email adresu
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Telefon</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Naslov *</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                            <div class="invalid-feedback">
+                                Molimo unesite naslov poruke
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Vaša poruka *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                            <div class="invalid-feedback">
+                                Molimo unesite vašu poruku
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-text text-muted">
+                                * Obavezna polja
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Pošalji poruku
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 animate__animated animate__fadeIn animate__delay-1s">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2902.4346017493997!2d21.93220261577897!3d43.32351227913386!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4755b733e07bcc93%3A0xb5e49bc1f75e2f2b!2z0JHRg9C70LXQstCw0YAg0J3QtdC80LDRmtC40ZvQsCA4NSwg0J3QuNGI!5e0!3m2!1ssr!2srs!4v1645189693729!5m2!1ssr!2srs"
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Form Validation Script -->
+<script>
+(function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+</script>
+
+<%- include('../partials/footer') %>

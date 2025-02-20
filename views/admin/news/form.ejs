@@ -1,0 +1,99 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title mb-4"><%= news.id ? 'Izmena vesti' : 'Nova vest' %></h1>
+
+                    <form action="/admin/news<%= news.id ? '/' + news.id : '' %>" 
+                          method="POST" 
+                          enctype="multipart/form-data">
+                        
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Naslov</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   value="<%= news.title || '' %>" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Sadržaj</label>
+                            <textarea class="form-control tinymce" id="content" name="content" 
+                                      rows="10"><%= news.content || '' %></textarea>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="main_image" class="form-label">Glavna slika</label>
+                                <input type="file" class="form-control" id="main_image" name="main_image" 
+                                       accept="image/*">
+                                <% if (news.main_image) { %>
+                                    <div class="mt-2">
+                                        <img src="/uploads/news/<%= news.main_image %>" 
+                                             alt="Glavna slika"
+                                             class="img-thumbnail"
+                                             style="max-height: 200px;">
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="additional_images" class="form-label">Dodatne slike (max 5)</label>
+                                <input type="file" class="form-control" id="additional_images" name="additional_images" 
+                                       accept="image/*" multiple>
+                                <% if (typeof additionalImages !== 'undefined' && additionalImages.length > 0) { %>
+                                    <div class="mt-2 d-flex flex-wrap gap-2">
+                                        <% additionalImages.forEach(function(img) { %>
+                                            <img src="/uploads/news/<%= img.image_path %>" 
+                                                 alt="Dodatna slika"
+                                                 class="img-thumbnail"
+                                                 style="height: 100px; width: 100px; object-fit: cover;">
+                                        <% }); %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="is_published" name="is_published" 
+                                   <%= news.is_published ? 'checked' : '' %>>
+                            <label class="form-check-label" for="is_published">Objavi odmah</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="/admin/news" class="btn btn-secondary">Odustani</a>
+                            <button type="submit" class="btn btn-primary">
+                                <%= news.id ? 'Sačuvaj izmene' : 'Dodaj vest' %>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include TinyMCE -->
+<script src="https://cdn.tiny.cloud/1/e14v8gftm1yzck6me49iqzkhhaz9jzyhww32uo4rza2fozg2/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        height: 500,
+        menubar: true,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | image | help',
+        images_upload_url: '/admin/upload-image',
+        automatic_uploads: true,
+        images_reuse_filename: true,
+        language: 'sr'
+    });
+</script>
+
+<%- include('../../partials/footer') %>

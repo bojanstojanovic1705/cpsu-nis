@@ -1,0 +1,78 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Upravljanje zaposlenima</h1>
+        </div>
+        <div class="col text-end">
+            <a href="/admin/employees/new" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Novi zaposleni
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Slika</th>
+                            <th>Ime</th>
+                            <th>Pozicija</th>
+                            <th>Email</th>
+                            <th>Telefon</th>
+                            <th>Redosled</th>
+                            <th>Status</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% employees.forEach(function(employee) { %>
+                            <tr>
+                                <td>
+                                    <% if (employee.image) { %>
+                                        <img src="/uploads/employees/<%= employee.image %>" 
+                                             alt="<%= employee.name %>" 
+                                             class="rounded-circle"
+                                             width="50" height="50"
+                                             style="object-fit: cover;">
+                                    <% } else { %>
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                                             style="width: 50px; height: 50px;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    <% } %>
+                                </td>
+                                <td><%= employee.name %></td>
+                                <td><%= employee.position %></td>
+                                <td><%= employee.email %></td>
+                                <td><%= employee.phone %></td>
+                                <td><%= employee.position_order %></td>
+                                <td>
+                                    <span class="badge <%= employee.is_active ? 'bg-success' : 'bg-danger' %>">
+                                        <%= employee.is_active ? 'Aktivan' : 'Neaktivan' %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/admin/employees/edit/<%= employee.id %>" class="btn btn-sm btn-primary me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="/admin/employees/<%= employee.id %>/delete" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                                onclick="return confirm('Da li ste sigurni da želite da obrišete ovog zaposlenog?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

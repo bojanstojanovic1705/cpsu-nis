@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="error-container">
+                <h1 class="display-1 text-danger mb-4">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </h1>
+                <h2 class="mb-4"><%= error %></h2>
+                <p class="text-muted mb-4">Možete se vratiti na početnu stranicu ili pokušati ponovo.</p>
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>
+                    Početna stranica
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

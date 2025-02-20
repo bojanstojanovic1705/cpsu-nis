@@ -1,0 +1,100 @@
+<!-- News Slider Section -->
+<section class="news-slider py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Aktuelnosti</h2>
+        
+        <div class="swiper news-swiper">
+            <div class="swiper-wrapper">
+                <% news.forEach(function(item) { %>
+                    <div class="swiper-slide">
+                        <div class="card h-100">
+                            <% if (item.main_image) { %>
+                                <img src="/uploads/news/<%= item.main_image %>" 
+                                     class="card-img-top" 
+                                     alt="<%= item.title %>"
+                                     style="height: 200px; object-fit: cover;">
+                            <% } else { %>
+                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                                     style="height: 200px;">
+                                    <i class="fas fa-image fa-3x"></i>
+                                </div>
+                            <% } %>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><%= item.title %></h5>
+                                <p class="card-text flex-grow-1"><%= item.excerpt %></p>
+                                <div class="mt-auto">
+                                    <a href="/vest/<%= item.slug %>" class="btn btn-primary">Više o tome</a>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <%= new Date(item.created_at).toLocaleDateString('sr-RS') %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Include Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+
+<!-- Include Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    const swiper = new Swiper('.news-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+            },
+            1024: {
+                slidesPerView: 3,
+            },
+        },
+    });
+</script>
+
+<!-- Custom styles for news slider -->
+<style>
+    .news-slider .swiper {
+        padding: 30px 50px;
+    }
+    
+    .news-slider .swiper-button-next,
+    .news-slider .swiper-button-prev {
+        color: #0d6efd;
+    }
+    
+    .news-slider .swiper-pagination-bullet-active {
+        background: #0d6efd;
+    }
+    
+    .news-slider .card {
+        transition: transform 0.3s ease;
+    }
+    
+    .news-slider .card:hover {
+        transform: translateY(-5px);
+    }
+</style>

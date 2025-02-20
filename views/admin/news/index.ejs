@@ -1,0 +1,80 @@
+<%- include('../../partials/header') %>
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Upravljanje vestima</h1>
+        </div>
+        <div class="col text-end">
+            <a href="/admin/news/new" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Nova vest
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Slika</th>
+                            <th>Naslov</th>
+                            <th>Datum</th>
+                            <th>Status</th>
+                            <th>Pregledi</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% news.forEach(function(item) { %>
+                            <tr>
+                                <td>
+                                    <% if (item.main_image) { %>
+                                        <img src="/uploads/news/<%= item.main_image %>" 
+                                             alt="<%= item.title %>" 
+                                             class="img-thumbnail"
+                                             width="100">
+                                    <% } else { %>
+                                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                                             style="width: 100px; height: 60px;">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <%= item.title %>
+                                    <div class="small text-muted">
+                                        <a href="/vest/<%= item.slug %>" target="_blank">
+                                            /vest/<%= item.slug %>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td><%= new Date(item.created_at).toLocaleDateString('sr-RS') %></td>
+                                <td>
+                                    <span class="badge <%= item.is_published ? 'bg-success' : 'bg-warning' %>">
+                                        <%= item.is_published ? 'Objavljeno' : 'Nacrt' %>
+                                    </span>
+                                </td>
+                                <td><%= item.views %></td>
+                                <td>
+                                    <a href="/admin/news/edit/<%= item.id %>" class="btn btn-sm btn-primary me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="/admin/news/<%= item.id %>/delete" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                                onclick="return confirm('Da li ste sigurni da želite da obrišete ovu vest?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>
